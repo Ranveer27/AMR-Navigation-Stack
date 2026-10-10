@@ -1,5 +1,3 @@
-<img width="1918" height="1055" alt="Screenshot from 2026-10-10 12-42-10" src="https://github.com/user-attachments/assets/dc7ff6c2-db84-4344-a34f-240e5eead207" /># Autonomous Mobile Robot (AMR) --- ROS 2, SLAM & Navigation
-
 A differential-drive Autonomous Mobile Robot (AMR) built with ROS 2
 Humble and simulated in a custom warehouse environment using Gazebo
 Fortress. The project uses **ros2_control** for wheel control and
