@@ -1,0 +1,47 @@
+controller_manager:
+  ros__parameters:
+    use_sim_time: true
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+diff_drive_controller:
+  ros__parameters:
+    use_sim_time: true
+
+    left_wheel_names: ["left_wheel_joint"]
+    right_wheel_names: ["right_wheel_joint"]
+
+    # must match the URDF: wheel joints at y = +/-(breath/2 + 0.025) -> 0.35 ; radius 0.08
+    wheel_separation: 0.35
+    wheel_radius: 0.08
+
+    # Odometry from the wheel ENCODERS (joint position feedback)
+    position_feedback: true
+    open_loop: false
+    odom_frame_id: odom
+    base_frame_id: base_footprint
+    enable_odom_tf: true
+    publish_rate: 50.0
+    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.01]
+
+    # teleop_twist_keyboard publishes geometry_msgs/Twist (not TwistStamped).
+    # On Humble this makes the controller listen on ~/cmd_vel_unstamped
+    use_stamped_vel: false
+    cmd_vel_timeout: 0.5
+
+    linear.x.has_velocity_limits: true
+    linear.x.max_velocity: 0.6
+    linear.x.min_velocity: -0.6
+    linear.x.has_acceleration_limits: true
+    linear.x.max_acceleration: 1.0
+    angular.z.has_velocity_limits: true
+    angular.z.max_velocity: 1.5
+    angular.z.min_velocity: -1.5
+    angular.z.has_acceleration_limits: true
+    angular.z.max_acceleration: 2.0

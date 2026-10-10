@@ -1,0 +1,49 @@
+<launch>
+    <!-- ================= paths (each one has its OWN name now) ================= -->
+    <let name="urdf_path"        value="$(find-pkg-share automatic_mobile_robot)/description/my_robot.xacro"/>
+    <let name="rviz_config_path" value="$(find-pkg-share automatic_mobile_robot)/rviz/view_robot.rviz"/>
+    <let name="bridge_config"    value="$(find-pkg-share automatic_mobile_robot)/config/gazebo_bridge.yaml"/>
+    <let name="slam_config"      value="$(find-pkg-share automatic_mobile_robot)/config/Slam_param.yaml"/>
+    <let name="world_path"       value="$(find-pkg-share automatic_mobile_robot)/worlds/warehouse_world.sdf"/>
+
+    <!-- lets Gazebo Fortress find the ign_ros2_control-system plugin -->
+    <set_env name="IGN_GAZEBO_SYSTEM_PLUGIN_PATH"
+             value="/opt/ros/humble/lib"/>
+
+    <!-- ================= robot_state_publisher (also serves URDF to ros2_control) ================= -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+        <param name="robot_description" value="$(command 'xacro $(var urdf_path)')"/>
+        <param name="use_sim_time" value="true"/>
+    </node>
+
+    <!-- ================= Gazebo Fortress + warehouse world ================= -->
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="-r $(var world_path)"/>
+    </include>
+
+    <!-- spawn the robot (wheels touch the ground at z=0, small z to avoid initial overlap) -->
+    <node pkg="ros_gz_sim" exec="create" output="screen"
+          args="-topic robot_description -name my_robot -x -4.0 -y 2.0 -z 0.05"/>
+
+    <!-- ================= ROS <-> Gazebo bridge (/clock, /scan, /camera) ================= -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge" output="screen">
+        <param name="config_file" value="$(var bridge_config)"/>
+    </node>
+
+    <!-- ================= ros2_control controllers ================= -->
+    <node pkg="controller_manager" exec="spawner" output="screen"
+          args="joint_state_broadcaster --controller-manager /controller_manager --controller-manager-timeout 60"/>
+    <node pkg="controller_manager" exec="spawner" output="screen"
+          args="diff_drive_controller --controller-manager /controller_manager --controller-manager-timeout 60"/>
+
+    <!-- ================= slam_toolbox (online async mapping) ================= -->
+    <include file="$(find-pkg-share slam_toolbox)/launch/online_async_launch.py">
+        <arg name="use_sim_time" value="true"/>
+        <arg name="slam_params_file" value="$(var slam_config)"/>
+    </include>
+
+    <!-- ================= RViz ================= -->
+    <node pkg="rviz2" exec="rviz2" output="screen" args="-d $(var rviz_config_path)">
+        <param name="use_sim_time" value="true"/>
+    </node>
+</launch>

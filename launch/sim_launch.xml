@@ -1,0 +1,34 @@
+<launch>
+    <let name="urdf_path"     value="$(find-pkg-share automatic_mobile_robot)/description/my_robot.xacro"/>
+    <let name="bridge_config" value="$(find-pkg-share automatic_mobile_robot)/config/gazebo_bridge.yaml"/>
+    <let name="world_path"    value="$(find-pkg-share automatic_mobile_robot)/worlds/warehouse_world.sdf"/>
+
+    <set_env name="IGN_GAZEBO_SYSTEM_PLUGIN_PATH" value="/opt/ros/humble/lib"/>
+
+    <node pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+        <param name="robot_description" value="$(command 'xacro $(var urdf_path)')"/>
+        <param name="use_sim_time" value="true"/>
+    </node>
+
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="-r $(var world_path)"/>
+    </include>
+
+    <!-- spawn pose: x=-4 y=2 yaw=0 (same as START_POSE in scripts/navigate.py) -->
+    <node pkg="ros_gz_sim" exec="create" output="screen"
+          args="-topic robot_description -name my_robot -x -4.0 -y 2.0 -z 0.05"/>
+
+    <node pkg="ros_gz_bridge" exec="parameter_bridge" output="screen">
+        <param name="config_file" value="$(var bridge_config)"/>
+    </node>
+
+    <node pkg="controller_manager" exec="spawner" output="screen"
+          args="joint_state_broadcaster --controller-manager /controller_manager --controller-manager-timeout 60"/>
+    <node pkg="controller_manager" exec="spawner" output="screen"
+          args="diff_drive_controller --controller-manager /controller_manager --controller-manager-timeout 60"/>
+
+    <!-- /cmd_vel (Nav2 or teleop) -> /diff_drive_controller/cmd_vel_unstamped -->
+    <node pkg="automatic_mobile_robot" exec="cmd_vel_relay.py" output="screen">
+        <param name="use_sim_time" value="true"/>
+    </node>
+</launch>

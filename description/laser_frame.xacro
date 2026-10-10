@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot name="my_robot"
+       xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <link name="laser_frame">
+        <inertial>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <mass value="0.1"/>
+            <inertia
+                ixx="${0.5*0.1*laser_radius*laser_radius}"
+                ixy="0.0"
+                ixz="0.0"
+                iyy="${0.5*0.1*laser_radius*laser_radius}"
+                iyz="0.0"
+                izz="${0.5*0.1*laser_radius*laser_radius}"/>
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0"
+                    rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder
+                    radius="0.05"
+                    length="0.04"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0"
+                    rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder
+                    radius="0.05"
+                    length="0.04"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="laser_frame_joint"
+           type="fixed">
+        <origin
+            xyz="${length/4} 0.0 ${(height/2)+(laser_height/2)}"
+            rpy="0.0 0.0 0.0"/>
+        <parent link="chassis_link"/>
+        <child link="laser_frame"/>
+    </joint>
+</robot>

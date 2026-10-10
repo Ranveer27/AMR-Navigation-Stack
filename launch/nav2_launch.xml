@@ -1,0 +1,20 @@
+<launch>
+    <!-- map saved earlier: ~/maps/warehouse_map.yaml  (change with map:=/path/to/map.yaml) -->
+    <arg name="map" default="$(env HOME)/maps/warehouse_map.yaml"/>
+
+    <let name="nav2_params" value="$(find-pkg-share automatic_mobile_robot)/config/nav2_params.yaml"/>
+
+    <include file="$(find-pkg-share nav2_bringup)/launch/bringup_launch.py">
+        <arg name="map" value="$(var map)"/>
+        <arg name="params_file" value="$(var nav2_params)"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="slam" value="False"/>
+        <arg name="autostart" value="true"/>
+        <arg name="use_composition" value="False"/>
+    </include>
+
+    <node pkg="rviz2" exec="rviz2" output="screen"
+          args="-d $(find-pkg-share nav2_bringup)/rviz/nav2_default_view.rviz">
+        <param name="use_sim_time" value="true"/>
+    </node>
+</launch>
