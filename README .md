@@ -1,4 +1,4 @@
-# Autonomous Mobile Robot (AMR) --- ROS 2, SLAM & Navigation
+<img width="1918" height="1055" alt="Screenshot from 2026-10-10 12-42-10" src="https://github.com/user-attachments/assets/dc7ff6c2-db84-4344-a34f-240e5eead207" /># Autonomous Mobile Robot (AMR) --- ROS 2, SLAM & Navigation
 
 A differential-drive Autonomous Mobile Robot (AMR) built with ROS 2
 Humble and simulated in a custom warehouse environment using Gazebo
@@ -32,11 +32,14 @@ ros2_control · slam_toolbox · Nav2 · Python
 -   [Future Work](#11-future-work)
 -   [License and Author](#12-license-and-author)
 
-```{=html}
-<!-- Add a screen recording or GIF here: Gazebo and RViz side by side, mapping and then navigating -->
-```
 
+
+
+https://github.com/user-attachments/assets/7e673546-9318-4f01-9537-f1b495a50aa1
 ------------------------------------------------------------------------
+
+<img width="1918" height="1055" alt="Screenshot from 2026-10-10 12-42-10" src="https://github.com/user-attachments/assets/e7424b55-f14c-49a1-95e4-27312ac32298" />
+
 
 ## 1. Features
 
@@ -621,39 +624,9 @@ silently drops them and no map appears. Setting
                                                    map; choose open floor
   -------------------------------------------------------------------------------------------------
 
-## 11. Future work
-
--   Add an IMU and fuse it with wheel odometry (`robot_localization`
-    EKF)
--   Dynamic obstacles and a more complex world
--   Run the same controller configuration on real hardware
--   Use the camera for obstacle detection or object recognition
-
-## 12. License and Author
-
-### License
-
-Choose and add a license before publishing the repository (for example,
-MIT or Apache-2.0). Until a license is added, reuse and redistribution
-permissions are not explicitly granted.
-
 ### Author
 
--   **Author:** Add your name
+-   **Author:** Ranveer Arya
 -   **GitHub:** Add your GitHub profile URL
--   **Contact:** Optional
+-   **Contact:** ranveerarya6200@gmail.com
 
-## Contributing
-
-Issues and pull requests are welcome. When reporting a problem, include
-the ROS 2 distribution, Gazebo version, relevant launch command, and
-complete error output.
-
-## Notes for Reproducibility
-
--   Replace machine-specific absolute paths such as `/home/<user>/...`
-    with paths appropriate to your system.
--   Confirm the installed package names and Gazebo plugin filenames for
-    your exact Fortress/Humble installation.
--   Store screenshots or demo media in a repository folder such as
-    `media/` and link them with relative paths.
