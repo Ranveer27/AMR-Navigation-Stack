@@ -625,6 +625,6 @@ silently drops them and no map appears. Setting
 ### Author
 
 -   **Author:** Ranveer Arya
--   **GitHub:** Add your GitHub profile URL
+-   **GitHub:** https://github.com/Ranveer27
 -   **Contact:** ranveerarya6200@gmail.com
 
